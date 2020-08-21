@@ -20,7 +20,8 @@ public:
 
     const char* getCurTimeFormat()
     {
-        time_t now_time = this->getNowTime();
+        time_t now_time = time(nullptr);
+        //time_t now_time = this->getNowTime();
         return ctime(&now_time);
     }
 
@@ -43,7 +44,13 @@ public:
         return std::chrono::duration_cast<std::chrono::microseconds>(high_resolution_clock::now() - _start).count();
     }
 
-private:
+    //获取纳秒
+    long long getTimerNanoseconds()
+    {
+        //当前时钟减去开始时钟的count
+        return std::chrono::duration_cast<std::chrono::nanoseconds>(high_resolution_clock::now() - _start).count();
+    }
+
     void Update()
     {
         _start = high_resolution_clock::now();
