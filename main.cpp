@@ -6,19 +6,25 @@
 int main(int argc, char* argv[]) 
 {
     MyTree::BinarySearchTree<int> my_tree;
-    my_tree.push_back(5);
-    my_tree.push_back(3);
-    // my_tree.push_back(4);
-    // my_tree.push_back(2);
-    // my_tree.push_back(7);
-    // my_tree.push_back(6);
-    // my_tree.push_back(8);
+    my_tree.insert(5);
+    my_tree.insert(3);
+    my_tree.insert(4);
+    my_tree.insert(2);
+    my_tree.insert(7);
+    my_tree.insert(6);
+    my_tree.insert(8);
 
     std::string str;
     beforePrint(my_tree.getRootNode(), str);
-
     std::cout << str << std::endl;
-    // Timer time;
-    // startGame(std::atoi(argv[0]), std::atoi(argv[1]));
-    // printf("\ntime:%f\n", time.getTimerMillSecond());
+    std::cout << my_tree.size() << std::endl; 
+
+    Timer time;
+    my_tree.erase(7);
+    printf("\ntime:%f\n", time.getTimerMillSecond());
+
+    std::string str2;
+    beforePrint(my_tree.getRootNode(), str2);
+    std::cout << str2 << std::endl;
+    std::cout << my_tree.size() << std::endl; 
 }

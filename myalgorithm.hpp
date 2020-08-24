@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-std::string IntToBinaryStr(int tmp)
+inline std::string IntToBinaryStr(int tmp)
 {
     int a = tmp / 2;
     int b = tmp % 2;
@@ -21,7 +21,7 @@ std::string IntToBinaryStr(int tmp)
     return ret;
 }
 
-std::vector<std::string> SplitString(const std::string& str,const std::string& delim)
+inline std::vector<std::string> SplitString(const std::string& str,const std::string& delim)
 {
     std::vector<std::string> result;
     std::string::size_type pos1 = 0;
@@ -43,7 +43,7 @@ std::vector<std::string> SplitString(const std::string& str,const std::string& d
     return result;
 }
 
-std::vector<int> SplitStringInt(const std::string& str,const std::string& delim)
+inline std::vector<int> SplitStringInt(const std::string& str,const std::string& delim)
 {
     std::vector<int> result;
     std::string::size_type pos1 = 0;
@@ -77,13 +77,16 @@ namespace MyTree
             _right = right;
         }
 
-        BinaryNode(const T&& value, BinaryNode* left = nullptr, BinaryNode* right = nullptr)
-        {
-            _element = std::move(value);
-            _left = left;
-            _right = right;
-        }
+<<<<<<< HEAD
+=======
+        // BinaryNode(const T&& value, BinaryNode* left = nullptr, BinaryNode* right = nullptr)
+        // {
+        //     _element = value;
+        //     _left = left;
+        //     _right = right;
+        // }
 
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
         T _element;
         struct BinaryNode* _left;
         struct BinaryNode* _right;
@@ -111,7 +114,7 @@ namespace MyTree
             return node;
         }
     }
-
+    
     template <typename T>
     const BinaryNode<T>* const findMax(const BinaryNode<T>* root)
     {
@@ -140,10 +143,34 @@ namespace MyTree
     {
     public:
         BinarySearchTree() : _root(nullptr), _size(0){}
+        BinarySearchTree(const BinarySearchTree& other)
+        {
+            _root = this->clone(other._root);
+        }
 
+        ~BinarySearchTree()
+        {
+            this->makeEmpty(_root);
+        }
+
+<<<<<<< HEAD
+        BinaryNode<T>* clone(BinaryNode<T>* node) const
+=======
+        void insert(const T& value)
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
+        {
+            if(nullptr == node)
+            {
+                return nullptr;
+            }
+            
+            return new BinaryNode<T>(node->_element, this->clone(node->_left), this->clone(node->_right));
+        }
+
+<<<<<<< HEAD
         int size() const { return _size; } 
 
-        void push_back(const T& value)
+        void insert(const T& value)
         {
             bool is_succ = false;
             if(nullptr == _root)
@@ -162,26 +189,27 @@ namespace MyTree
                 ++_size;
             }
         }
+=======
+        // void insert(const T&& value)
+        // {
+        //     bool is_succ = false;
+        //     if(nullptr == _root)
+        //     {
+        //         _root = new BinaryNode<T>(std::forward<T>(value), nullptr, nullptr);
+        //         is_succ = true;
+        //     }
+        //     else
+        //     {
+        //         BinaryNode<T>* new_element = new BinaryNode<T>(std::forward<T>(value), nullptr, nullptr);
+        //         is_succ = this->insertElement(new_element);
+        //     }
 
-        void push_back(const T&& value)
-        {
-            bool is_succ = false;
-            if(nullptr == _root)
-            {
-                _root = new BinaryNode<T>(std::move(value), nullptr, nullptr);
-                is_succ = true;
-            }
-            else
-            {
-                BinaryNode<T>* new_element = new BinaryNode<T>(std::move(value), nullptr, nullptr);
-                is_succ = this->insertElement(new_element);
-            }
-
-            if(is_succ)
-            {
-                ++_size;
-            }
-        }
+        //     if(is_succ)
+        //     {
+        //         ++_size;
+        //     }
+        // }
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
 
         void erase(const T& value)
         {
@@ -223,7 +251,7 @@ namespace MyTree
             {
                 last_node->_right = new_node;
             }
-            else if(cur_node->_element > new_node->_element)
+            else if(last_node->_element > new_node->_element)
             {
                  last_node->_left = new_node;
             }
@@ -231,9 +259,9 @@ namespace MyTree
             return true;
         }
 
+        // 寻找元素所在节点
         BinaryNode<T>* findElement(const T& value)
         {
-            // 寻找元素所在节点
             BinaryNode<T>* tmp_node = _root;
             while(nullptr != tmp_node)
             {
@@ -252,43 +280,107 @@ namespace MyTree
             }
 
             return tmp_node;
-        }
+        }   
 
         void deleteElement(const T& value)
         {
             // 寻找所删除元素的节点
-            BinaryNode<T>* element_node = this->findElement(value);
+            BinaryNode<T>* element_node = findElement(value);
             if(nullptr == element_node)
             {
                 return;
             }
 
-            BinaryNode<T>* delete_element = nullptr;
-            if(nullptr != element_node->_left)
+            if(nullptr == element_node->_left && nullptr == element_node->_right)
             {
-                // 寻找左子树中的最大值
-                delete_element = findMax(element_node->_left);
-                element_node->_element = delete_element->_element;
+                // 1、所删除节点为叶子节点
+                delete element_node;
+                element_node = nullptr;
             }
-            else if(nullptr != element_node->_right)
+            else if(nullptr == element_node->_left)
             {
-                 // 寻找右子树中的最小值
-                  delete_element = findMin(element_node->_right);
-                  element_node->_element = delete_element->_element;
+                // 2、所删除节点左子树为空，只需将其右子树代替
+                 BinaryNode<T>* tmp_node = element_node;
+                 element_node = element_node->_right;
+                 delete tmp_node;
             }
+            else if(nullptr == element_node->_right)
+            {
+                // 3、所删节点右子树为空，只需将其左子树代替
+                 BinaryNode<T>* tmp_node = element_node;
+                 element_node = element_node->_left;
+                 delete tmp_node;
+            }
+<<<<<<< HEAD
+            else if(nullptr == element_node->_right)
+            {
+                // 4、左右子树都存在，找到其左子树的最大节点
+                BinaryNode<T>* pre_node = element_node;
+                BinaryNode<T>* child_node = element_node->_left;
+
+                while(nullptr != child_node->_right)
+                {
+                    pre_node = child_node;
+                    child_node = child_node->_right;
+                }
+                element_node->_element = child_node->_element;
+
+                if(pre_node != element_node)
+                {
+                    pre_node->_right = child_node->_left;
+                }
+                else
+                {
+                    pre_node->_left = child_node->_left;
+                }
+                
+                delete child_node;
+            }
+
+            --_size;
+        } 
+
+
+        void makeEmpty(BinaryNode<T>* node)
+        {
+            if(nullptr != node)
+            {
+                this->makeEmpty(node->_left);
+                this->makeEmpty(node->_right);
+                delete node;
+            }
+=======
             else
             {
-                // 无左右子树，为叶子节点，则直接删除
-                delete_element = element_node;
+                // 4、左右子树都存在，找到其左子树的最大节点
+                BinaryNode<T>* pre_node = element_node;
+                BinaryNode<T>* child_node = element_node->_left;
+
+                while(nullptr != child_node->_right)
+                {
+                    pre_node = child_node;
+                    child_node = child_node->_right;
+                }
+                element_node->_element = child_node->_element;
+
+                if(pre_node != element_node)
+                {
+                    pre_node->_right = child_node->_left;
+                }
+                else
+                {
+                    pre_node->_left = child_node->_left;
+                }
+                
+                delete child_node;
             }
 
-            if(nullptr != delete_element)
-            {
-                --_size;
-                delete delete_element;
-            }
+            --_size;
+        } 
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
+
+            node = nullptr;
         }
-
     private:
         struct BinaryNode<T>* _root;
         int _size;
