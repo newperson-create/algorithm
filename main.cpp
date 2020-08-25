@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     std::cout << my_tree.size() << std::endl; 
 
     Timer time;
-    my_tree.erase(7);
+    my_tree.erase(3);
     printf("\ntime:%f\n", time.getTimerMillSecond());
 
     std::string str2;
