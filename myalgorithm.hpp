@@ -78,7 +78,10 @@ namespace MyTree
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
         // BinaryNode(const T&& value, BinaryNode* left = nullptr, BinaryNode* right = nullptr)
         // {
         //     _element = value;
@@ -148,7 +151,13 @@ namespace MyTree
             _root = this->clone(other._root);
         }
 
+<<<<<<< HEAD
         ~BinarySearchTree()
+=======
+        int size() const { return _size; } 
+
+        void insert(const T& value)
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
         {
             this->makeEmpty(_root);
         }
@@ -167,6 +176,7 @@ namespace MyTree
             return new BinaryNode<T>(node->_element, this->clone(node->_left), this->clone(node->_right));
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         int size() const { return _size; } 
 
@@ -190,6 +200,8 @@ namespace MyTree
             }
         }
 =======
+=======
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
         // void insert(const T&& value)
         // {
         //     bool is_succ = false;
@@ -209,6 +221,9 @@ namespace MyTree
         //         ++_size;
         //     }
         // }
+<<<<<<< HEAD
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
+=======
 >>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
 
         void erase(const T& value)
@@ -312,6 +327,7 @@ namespace MyTree
                  delete tmp_node;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             else if(nullptr == element_node->_right)
             {
                 // 4、左右子树都存在，找到其左子树的最大节点
@@ -349,6 +365,35 @@ namespace MyTree
                 this->makeEmpty(node->_right);
                 delete node;
             }
+=======
+            else
+            {
+                // 4、左右子树都存在，找到其左子树的最大节点
+                BinaryNode<T>* pre_node = element_node;
+                BinaryNode<T>* child_node = element_node->_left;
+
+                while(nullptr != child_node->_right)
+                {
+                    pre_node = child_node;
+                    child_node = child_node->_right;
+                }
+                element_node->_element = child_node->_element;
+
+                if(pre_node != element_node)
+                {
+                    pre_node->_right = child_node->_left;
+                }
+                else
+                {
+                    pre_node->_left = child_node->_left;
+                }
+                
+                delete child_node;
+            }
+
+            --_size;
+        } 
+>>>>>>> 5b9660dcbb15e6b18c70dd0706d5ba81a49847ed
 =======
             else
             {
